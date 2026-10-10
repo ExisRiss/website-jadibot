@@ -1,19 +1,5 @@
 import { assertBodySize, enforceSameOrigin, rateLimit, securityHeaders } from './_security.js'
-
-// The browser only talks to this Vercel function over HTTPS. The function must
-// proxy onward to a separately configured HTTPS origin; do not fall back to an
-// old/raw Pterodactyl HTTP allocation because Authorization headers are relayed.
-function configuredOrigin() {
-  const raw = String(process.env.UMI_API_ORIGIN || '').trim()
-  if (!raw) throw Object.assign(new Error('Backend Umi belum dikonfigurasi.'), { status: 503 })
-
-  let url
-  try { url = new URL(raw) } catch { throw Object.assign(new Error('Konfigurasi backend Umi tidak valid.'), { status: 503 }) }
-  if (url.protocol !== 'https:' || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
-    throw Object.assign(new Error('Backend Umi harus menggunakan origin HTTPS yang valid.'), { status: 503 })
-  }
-  return url.origin
-}
+import { getBotApiConfig } from './_bot-config.js'
 
 const ALLOWED_METHODS = new Set(['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'])
 const ALLOWED_PATHS = new Set([
@@ -43,9 +29,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Metode tidak diizinkan.' })
   }
 
-  let origin
+  let botConfig
   try {
-    origin = configuredOrigin()
+    botConfig = await getBotApiConfig()
   } catch (error) {
     return res.status(error.status || 503).json({ error: error.message })
   }
@@ -78,7 +64,7 @@ export default async function handler(req, res) {
       return res.status(error.status || 400).json({ error: error.message })
     }
   }
-  const target = `${origin}/api/${path}${query.size ? `?${query.toString()}` : ''}`
+  const target = `${botConfig.origin}/api/${path}${query.size ? `?${query.toString()}` : ''}`
 
   const headers = {
     Accept: req.headers.accept || 'application/json',
@@ -101,6 +87,7 @@ export default async function handler(req, res) {
     res.status(upstream.status)
     res.setHeader('Content-Type', upstream.headers.get('content-type') || 'application/json; charset=utf-8')
     res.setHeader('Cache-Control', 'no-store')
+    res.setHeader('X-Umi-Config-Version', botConfig.version)
     return req.method === 'HEAD' ? res.end() : res.send(data)
   } catch (error) {
     const timeout = error?.name === 'TimeoutError' || error?.name === 'AbortError'

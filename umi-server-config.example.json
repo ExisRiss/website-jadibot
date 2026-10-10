@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "version": "2026-10-10T00:00:00Z",
+  "refreshSeconds": 60,
+  "botApiOrigin": "https://api.example.com",
+  "notes": "Public routing config only. Never add Pterodactyl, GitHub, Vercel, Supabase, WhatsApp, or pairing secrets."
+}
