@@ -1,0 +1,214 @@
+{
+  "version": 2,
+  "regions": [
+    "sin1"
+  ],
+  "functions": {
+    "api/proxy.js": {
+      "maxDuration": 60
+    },
+    "api/platform.js": {
+      "maxDuration": 60
+    },
+    "api/unified.js": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/platform/(.*)",
+      "destination": "/api/platform?path=$1"
+    },
+    {
+      "source": "/api/v1",
+      "destination": "/api/unified?path=health"
+    },
+    {
+      "source": "/api/v1/(.*)",
+      "destination": "/api/unified?path=$1"
+    },
+    {
+      "source": "/api/alzriss",
+      "destination": "/api/unified?path=health"
+    },
+    {
+      "source": "/api/alzriss/(.*)",
+      "destination": "/api/unified?path=$1"
+    },
+    {
+      "source": "/api/auth/username-login",
+      "destination": "/api/unified?path=auth/username-login"
+    },
+    {
+      "source": "/api/keys",
+      "destination": "/api/unified?path=keys"
+    },
+    {
+      "source": "/api/owner",
+      "destination": "/api/unified?path=owner"
+    },
+    {
+      "source": "/api/plugins",
+      "destination": "/api/unified?path=plugins"
+    },
+    {
+      "source": "/api/chat/upload",
+      "destination": "/api/unified?path=chat/upload"
+    },
+    {
+      "source": "/api/premium",
+      "destination": "/api/unified?path=premium"
+    },
+    {
+      "source": "/api/gateway/(.*)",
+      "destination": "/api/unified?path=gateway/$1"
+    },
+    {
+      "source": "/s/(.*)",
+      "destination": "/api/unified?path=short/$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/proxy?path=$1"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/connect",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/connect/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dashboard/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/settings",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/settings/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/auth",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/home",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/((?!api/|assets/).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://tlcvkksfgdyeiypzcwdj.supabase.co; media-src 'self' blob: https://tlcvkksfgdyeiypzcwdj.supabase.co; font-src 'self'; connect-src 'self' https://tlcvkksfgdyeiypzcwdj.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "X-Permitted-Cross-Domain-Policies",
+          "value": "none"
+        },
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "off"
+        }
+      ]
+    }
+  ]
+}

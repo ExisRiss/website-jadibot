@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffe45e">
+  <meta name="description" content="Usanagi Umi Jadibot Studio — hubungkan dan kelola bot WhatsApp secara aman.">
+  <title>Usanagi Umi · Jadibot Studio</title>
+  <link rel="icon" href="/assets/umi-logo.jpg">
+  <link rel="preload" href="/assets/fonts/space-mono-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/assets/app.css?v=2">
+</head>
+<body>
+  <div id="scene" class="scene" aria-hidden="true"><div class="scene-shade"></div><i class="orb orb-a"></i><i class="orb orb-b"></i><i class="orb orb-c"></i></div>
+  <header class="topbar">
+    <a class="brand" href="#home"><img src="/assets/umi-logo.jpg" alt="Usanagi Umi"><span><strong>USANAGI UMI</strong><small>JADIBOT STUDIO</small></span></a>
+    <button id="menuToggle" class="icon-btn nav-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false">☰</button>
+    <nav id="mainNav" aria-label="Navigasi utama">
+      <a href="#dashboard" data-private>Dashboard</a><a href="#connect" data-private>Pairing</a><a href="#settings" data-private>Settings</a><a href="#chat" data-private>Chat</a><a href="#plugins" data-private>Plugin</a><a href="#console" data-private>Console</a><a href="#owner" data-private data-owner>Owner</a>
+      <button id="logoutButton" class="nav-danger" type="button" data-private>Keluar</button>
+    </nav>
+  </header>
+
+  <main id="root">
+    <section id="landingView" class="public-view">
+      <div class="hero-copy">
+        <span class="eyebrow">MULTI-DEVICE · REAL-TIME · PRIVATE SESSION</span>
+        <h1>JADIKAN NOMORMU <em>BOT UMI</em> SENDIRI.</h1>
+        <p>Pairing nomor WhatsApp, kelola identitas bot, plugin, media, backup, dan runtime dari satu studio.</p>
+        <div class="hero-actions"><button id="startButton" class="btn btn-primary" type="button">BUAT JADIBOT ↗</button><a class="btn btn-glass" href="https://whatsapp.com/channel/0029VbDBOXH11ulIKHVbmO0m" target="_blank" rel="noreferrer">SALURAN RESMI</a></div>
+        <div class="feature-strip"><article><b>01</b><span>Nomor custom</span></article><article><b>02</b><span>Pairing 8 digit</span></article><article><b>03</b><span>Config per sesi</span></article><article><b>04</b><span>Backup aman</span></article></div>
+      </div>
+      <div class="hero-card"><div class="portrait"><img src="/assets/umi-logo.jpg" alt="Maskot Umi"></div><span class="sticker sticker-one">READY!</span><span class="sticker sticker-two">NO SHARED CONFIG</span></div>
+    </section>
+
+    <section id="authView" class="public-view hidden">
+      <div class="auth-intro"><span class="eyebrow">SECURE PLATFORM</span><h2>MASUK KE<br>UMI STUDIO.</h2><p>Autentikasi akun diamankan melalui Supabase. Data sesi WhatsApp tetap diproses oleh server bot.</p></div>
+      <div class="glass-card auth-card">
+        <div class="auth-tabs"><button type="button" data-auth-tab="login" class="active">LOGIN</button><button type="button" data-auth-tab="register">DAFTAR</button></div>
+        <form id="loginForm">
+          <label>Username atau email<input name="identifier" autocomplete="username" required placeholder="AlzRiss atau nama@gmail.com"></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="Minimal 6 karakter"></label>
+          <button class="btn btn-primary" type="submit">MASUK ↗</button>
+        </form>
+        <form id="registerForm" class="hidden">
+          <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="40" pattern="[A-Za-z0-9_.-]{3,40}" required placeholder="Username baru"></label>
+          <label>Gmail<input name="email" type="email" autocomplete="email" pattern="[A-Za-z0-9]+(?:\.?[A-Za-z0-9]+)*@gmail\.com" required placeholder="nama@gmail.com"></label>
+          <label>Password<input name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="Minimal 8 karakter"></label>
+          <button class="btn btn-yellow" type="submit">BUAT AKUN ↗</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="appView" class="app-view hidden">
+      <header class="workspace-head"><div><span class="eyebrow">CONTROL ROOM</span><h2 id="pageTitle">DASHBOARD</h2><div id="identity" class="identity"></div></div><button id="newSessionButton" class="btn btn-yellow" type="button">+ NOMOR BARU</button></header>
+      <div class="workspace">
+        <section id="dashboardPage" class="page">
+          <div class="cover"><img src="/assets/dashboard-cover.jpg" alt="By AlzRiss - Usanagi Umi AI" loading="lazy" decoding="async"></div>
+          <div class="stats"><article class="stat cyan"><span>TOTAL SESSION</span><b id="statTotal">0</b></article><article class="stat lime"><span>ONLINE</span><b id="statOnline">0</b></article><article class="stat pink"><span>OFFLINE</span><b id="statOffline">0</b></article></div>
+          <div class="section-head"><h3>BOT MILIKMU</h3><button id="refreshSessions" class="mini" type="button">↻ REFRESH</button></div><div id="sessionList" class="card-grid"></div>
+        </section>
+
+        <section id="connectPage" class="page hidden"><div class="split"><article class="panel"><span class="step">01</span><h3>MASUKKAN NOMOR</h3><p>Gunakan format internasional tanpa tanda plus. Contoh: <b>628123456789</b>.</p><form id="pairForm"><label>Nomor WhatsApp<input id="pairPhone" inputmode="numeric" required placeholder="628xxxxxxxxxx"></label><button class="btn btn-primary" type="submit">MINTA PAIRING CODE</button></form></article><article class="panel yellow-panel"><span class="step">02</span><h3>PAIRING CODE</h3><output id="pairCode" class="pair-code">••••-••••</output><ol><li>Buka WhatsApp.</li><li>Pilih <b>Perangkat tertaut</b>.</li><li>Pilih tautkan dengan nomor telepon.</li><li>Masukkan kode di atas.</li></ol><div id="pairStatus" class="notice">Menunggu nomor.</div></article></div></section>
+
+        <section id="settingsPage" class="page hidden">
+          <div class="settings-layout"><aside class="panel session-picker"><h3>PILIH SESSION</h3><select id="settingsSession"></select><div id="sessionStatus" class="notice">—</div><button id="restartSession" class="mini" type="button">↻ RESTART BOT</button></aside>
+          <form id="settingsForm" class="panel"><div class="section-head"><h3>IDENTITAS & RUNTIME</h3><button id="resetSettings" class="mini danger" type="button">RESET</button></div>
+            <div class="notice"><b>INFO LIMIT</b><br>Isi <b>-1</b> untuk Unlimited. Limit awal berlaku untuk user baru pada session ini. User Premium aktif otomatis Unlimited dan tidak dipotong limit.</div>
+            <div class="form-grid"><label>Nama Bot<input name="bot_name" maxlength="80"></label><label>Nomor Owner Bot<input name="owner_number" inputmode="numeric" pattern="[0-9]{8,15}" minlength="8" maxlength="15" required placeholder="628xxxxxxxxxx"><small>Owner pertama untuk bot session ini.</small></label><label>Owner/Developer Terkunci<input id="lockedOwnerNumber" value="6287813709432" readonly aria-readonly="true"><small>Selalu aktif dan tidak dapat dihapus.</small></label><label>Prefix<input name="prefix" maxlength="3"></label><label>Mode Akses<select name="mode"><option value="public">Public — semua pengguna</option><option value="self">Self — hanya owner dan bot</option></select></label><label>Limit Awal<input name="default_limit" type="number" min="-1" max="100000" step="1"><small>Gunakan -1 untuk Unlimited.</small></label></div>
+            <div class="toggle-grid"><label><input name="only_group" type="checkbox"> Only GB — blokir private chat</label><label><input name="registration_required" type="checkbox"> Wajib daftar sebelum memakai bot</label><label><input name="auto_typing" type="checkbox"> Auto Typing</label><label><input name="auto_translate" type="checkbox"> Auto Translate</label><label><input name="send_music" type="checkbox"> Musik TikTok</label><label><input name="menu_audio_enabled" type="checkbox"> Audio Menu</label></div>
+            <h4>LINK & TIKTOK</h4><div class="form-grid"><label>Maks. Foto TikTok<input name="max_photos" type="number" min="1" max="20"></label><label>Website<input name="website_url" type="url"></label><label>Channel<input name="channel_url" type="url"></label><label>Grup<input name="group_url" type="url"></label></div>
+            <h4>AUTO TYPING & TRANSLATE</h4><div class="form-grid"><label>Typing min (ms)<input name="typing_min" type="number" min="0" max="5000"></label><label>Typing maks (ms)<input name="typing_max" type="number" min="0" max="10000"></label><label>Karakter/detik<input name="typing_cps" type="number" min="1" max="10000"></label><label>Bahasa default<input name="translate_language" maxlength="10"></label></div>
+            <h4>RUNTIME LANJUTAN</h4><div class="form-grid"><label>Connect timeout<input name="connect_timeout" type="number" min="10000" max="120000"></label><label>Keep alive<input name="keepalive" type="number" min="5000" max="120000"></label><label>Retry delay<input name="retry_delay" type="number" min="0" max="10000"></label><label>Maks retry<input name="max_retries" type="number" min="1" max="30"></label><label>Multiplier<input name="multiplier" type="number" min="1" max="1000"></label></div>
+            <label>Pesan tunggu<textarea name="wait_text" maxlength="500"></textarea></label><label>Pesan error<textarea name="error_text" maxlength="500"></textarea></label><label>Command nonaktif<textarea name="disabled_plugins" placeholder="Satu per baris"></textarea></label><button class="btn btn-primary" type="submit">SIMPAN & TERAPKAN</button>
+          </form></div>
+          <article class="panel block"><div class="section-head"><h3>BACKUP SESSION</h3><button id="createBackup" class="mini" type="button">+ BUAT BACKUP</button></div><div id="backupList" class="list"></div></article>
+          <form id="mediaForm" class="panel block"><div class="section-head"><h3>MEDIA BOT</h3><span class="chip partner">URL / UPLOAD</span></div><div class="form-grid"><label>Jenis media<select id="mediaKind"><option value="logo">Logo bot</option><option value="menu_banner">Banner menu</option><option value="menu_video">Video menu</option><option value="menu_audio">Audio menu</option><option value="welcome_image">Gambar welcome</option><option value="goodbye_image">Foto goodbye</option><option value="thumbnail">Thumbnail</option></select></label><label>URL media<input id="mediaUrl" type="url" placeholder="https://..."></label></div><label>Upload file<input id="mediaFile" type="file" accept="image/*,video/mp4,video/webm,audio/*"></label><div id="mediaProgress" class="notice hidden"></div><button class="btn btn-primary" type="submit">UPLOAD & TERAPKAN</button></form>
+        </section>
+
+        <section id="chatPage" class="page hidden"><article class="panel chat-panel"><div class="section-head"><h3>CHAT GLOBAL</h3><button id="refreshChat" class="mini" type="button">↻ REFRESH</button></div><p>Alamat email lengkap tidak ditampilkan kepada pengguna lain.</p><div id="chatMessages" class="messages" aria-live="polite"></div><form id="chatForm" class="send-form"><input id="chatInput" maxlength="1000" required placeholder="Tulis pesan..."><button class="btn btn-primary" type="submit">KIRIM</button></form></article></section>
+
+        <section id="pluginsPage" class="page hidden"><form id="pluginUploadForm" class="panel hidden" data-owner><div class="section-head"><h3>UPLOAD PLUGIN</h3><span class="chip owner">OWNER ONLY</span></div><div class="form-grid"><label>Slug<input name="slug" pattern="[a-z0-9_-]{2,64}" required></label><label>JavaScript<input name="file" type="file" accept=".js,text/javascript" required></label></div><label>Deskripsi<textarea name="description" maxlength="1000"></textarea></label><button class="btn btn-yellow" type="submit">KIRIM KE KATALOG</button></form><article class="panel block"><div class="section-head"><h3>KATALOG PLUGIN</h3><button id="refreshPlugins" class="mini" type="button">↻ REFRESH</button></div><label>Install ke session<select id="pluginSession"></select></label><div id="pluginList" class="card-grid"></div></article></section>
+
+        <section id="consolePage" class="page hidden"><article class="panel"><div class="section-head"><h3>SAFE CONSOLE</h3><button id="refreshLogs" class="mini" type="button">↻ LOG</button></div><p>Hanya command aman yang diizinkan: status, restart, disconnect, plugins, enable, dan disable.</p><label>Session<select id="consoleSession"></select></label><pre id="consoleLogs" class="terminal">Pilih session.</pre><form id="consoleForm" class="send-form"><input id="consoleCommand" maxlength="200" required placeholder="status"><button class="btn btn-yellow" type="submit">JALANKAN</button></form><pre id="consoleOutput" class="terminal output"></pre></article></section>
+
+        <section id="ownerPage" class="page hidden"><div class="stats owner-stats"><article class="stat cyan"><span>AKUN</span><b id="ownerUsers">0</b></article><article class="stat lime"><span>BOT ONLINE</span><b id="ownerOnline">0</b></article><article class="stat pink"><span>TOTAL SESSION</span><b id="ownerSessions">0</b></article></div>
+          <form id="createAccountForm" class="panel block"><div class="section-head"><h3>TAMBAH AKUN</h3><span class="chip owner">OWNER</span></div><div class="form-grid"><label>Username<input name="username" minlength="2" maxlength="40" required></label><label>Email<input name="email" type="email" required></label><label>Password sementara<input name="password" type="password" minlength="8" required></label><label>Role<select name="roles" multiple size="5"><option value="user" selected>User</option><option value="admin">Admin</option><option value="partner">Partner</option><option value="owner">Owner</option><option value="developer">Developer</option></select></label></div><button class="btn btn-primary" type="submit">BUAT AKUN</button></form>
+          <article class="panel block"><div class="section-head"><h3>AKUN & SESSION</h3><button id="refreshOwner" class="mini" type="button">↻ REFRESH</button></div><label>Cari username atau email<input id="ownerSearch" type="search" placeholder="Cari akun..."></label><div class="owner-table-wrap"><table><thead><tr><th>Akun</th><th>Role</th><th>Session</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="ownerTable"></tbody></table></div></article>
+          <article class="panel block"><div class="section-head"><h3>AUDIT LOG</h3><button id="refreshAudit" class="mini" type="button">↻ REFRESH</button></div><div id="auditList" class="list"></div></article>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  <script src="/assets/supabase.min.js?v=2.76.1"></script>
+  <script src="/assets/app.js?v=4" defer></script>
+</body>
+</html>

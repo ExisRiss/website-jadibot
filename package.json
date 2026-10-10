@@ -1,0 +1,13 @@
+{
+  "name": "usanagi-umi-jadibot-web",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "formidable": "3.5.4",
+    "qrcode": "1.5.4"
+  }
+}
